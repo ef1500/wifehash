@@ -9,7 +9,7 @@ dependencies, MIT.
 - C99 or C++11. Needs `<stddef.h>`, `<stdint.h>`, `<string.h>`, and `<immintrin.h>`
   only when the compiler reports AVX2.
 
-wifehash is a member of the MEIHASH family; its mixer is meihash's dual-MUM
+wifehash is a member of the [MEIHASH](https://github.com/ef1500/MeiHash) family; its mixer is meihash's dual-MUM
 folding mixer, used one path at a time. See [How it works](#how-it-works).
 
 ## Install
