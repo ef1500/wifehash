@@ -1,7 +1,12 @@
+<div align="center">
+
 # wifehash
 
-A 128-bit non-cryptographic hash built for large inputs. Single header, no
-dependencies, MIT.
+**A 128-bit non-cryptographic hash built for large inputs.**
+
+</div>
+
+---
 
 - Passes all 252 tests in [SMHasher3](https://gitlab.com/fwojcik/smhasher3)
   ([full results](results/smhasher3-wifehash.txt)). Verification code `0xAA7C087B`.
