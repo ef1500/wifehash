@@ -133,6 +133,8 @@ Lake, 6 cores, 2.6 GHz base), gcc 14.1, `-O3 -march=native`, Release build.
 
 It should be noted that wifehash is NOT for small keys. It's for bulk hashing.
 
+Additionally note that XXH3-128 does NOT pass the full SMHasher3 suite. Wifehash does.
+
 ## How it works
 
 Eight 64-bit accumulator lanes are fed 64 bytes at a time with
