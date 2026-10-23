@@ -2,19 +2,19 @@
 
 # wifehash
 
-**A 128-bit non-cryptographic hash built for large inputs.**
+**A 128-bit non-cryptographic hash that passes SMHasher3 extra, built for large inputs.**
 
 </div>
 
 ---
 
-- Passes all 252 tests in [SMHasher3](https://gitlab.com/fwojcik/smhasher3)
+- Passes ALL 252 tests in [SMHasher3](https://gitlab.com/fwojcik/smhasher3)
   ([full results](results/smhasher3-wifehash.txt)). Verification code `0xAA7C087B`.
 - AVX2 bulk path with a portable version built-in.
 - C99 or C++11. Needs `<stddef.h>`, `<stdint.h>`, `<string.h>`, and `<immintrin.h>`
   only when the compiler reports AVX2.
 
-wifehash is a member of the [MEIHASH](https://github.com/ef1500/MeiHash) family; its mixer is meihash's dual-MUM
+wifehash is a member of the [MeiHash](https://github.com/ef1500/MeiHash) family; its mixer is meihash's dual-MUM
 folding mixer, used one path at a time. See [How it works](#how-it-works).
 
 ## Install
@@ -117,19 +117,21 @@ Digests are printed high word first, as `h[1]` then `h[0]`.
 
 ## Performance
 
-These numbers were recording using [SMHasher3](https://gitlab.com/fwojcik/smhasher3)'s speed test on an Intel Core i7-10750H (Comet
-Lake, 6 cores, 2.6 GHz base), gcc 14.1, `-O3 -march=native`, Release build.
+These numbers were recorded using [SMHasher3](https://gitlab.com/fwojcik/smhasher3)'s speed test on an Intel Core i7-10750H (Comet
+Lake, 6 cores, 2.6 GHz base), gcc 14.1, `-O3 -march=native`, Release build. I tested each competing hash 5 times, took their average and reported them here. I am reporting wifehash's number from the results file so you may compare if you'd like. I've reported a ± range as well for XXH3-128 and Wifehash, since it's a pretty tight race. 
 
 | Hash | Output | Bulk (bytes/cycle) | Short keys (cycles/hash, 1-31 B) |
 |:---|---:|---:|---:|
-| **wifehash** | 128 | **21.95** | 21.74 |
-| XXH3-128 | 128 | 20.4 | 19.1 |
+| **wifehash** | 128 | **21.95** (±0.30) | 23.14 (±0.67) |
+| XXH3-128 | 128 | 20.4 (±0.38) | 19.1 (±0.38) |
 | MeowHash (AES-NI) | 128 | 19.4 | 38.1 |
 | rapidhash | 64 | 14.0 | 15.5 |
 | MuseAir-128.bfast | 128 | 13.2 | 15.9 |
 | MuseAir-128 | 128 | 11.4 | 16.3 |
 | a5hash-128 | 128 | 10.8 | 13.4 |
 | komihash | 64 | 10.3 | 16.5 |
+
+~8% Faster than XXH3-128 (bulk), ~21% slower than XXH3-128 on small keys.
 
 It should be noted that wifehash is NOT for small keys. It's for bulk hashing.
 
