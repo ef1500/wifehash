@@ -118,7 +118,7 @@ Digests are printed high word first, as `h[1]` then `h[0]`.
 ## Performance
 
 These numbers were recorded using [SMHasher3](https://gitlab.com/fwojcik/smhasher3)'s speed test on an Intel Core i7-10750H (Comet
-Lake, 6 cores, 2.6 GHz base), gcc 14.1, `-O3 -march=native`, Release build. I tested each competing hash 5 times, took their average and reported them here. I am reporting wifehash's number from the results file so you may compare if you'd like. I've reported a ± range as well for XXH3-128 and Wifehash, since it's a pretty tight race. 
+Lake, 6 cores, 2.6 GHz base), gcc 14.1, `-O3 -march=native`, Release build. I tested each competing hash 5 times, took their average and reported them here. I am reporting wifehash's number from the results file so you may compare if you'd like. I've reported a ± range as well for XXH3-128 and Wifehash, since it's a pretty tight race.
 
 | Hash | Output | Bulk (bytes/cycle) | Short keys (cycles/hash, 1-31 B) |
 |:---|---:|---:|---:|
