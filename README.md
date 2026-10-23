@@ -133,6 +133,8 @@ Lake, 6 cores, 2.6 GHz base), gcc 14.1, `-O3 -march=native`, Release build. I te
 
 ~8% Faster than XXH3-128 (bulk), ~21% slower than XXH3-128 on small keys.
 
+~13% Faster than MeowHash (which needs AES-NI) on bulk, ~39% faster than MeowHash on short keys.
+
 It should be noted that wifehash is NOT for small keys. It's for bulk hashing.
 
 Additionally note that XXH3-128 does NOT pass the full SMHasher3 suite. Wifehash does.
