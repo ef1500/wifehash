@@ -122,8 +122,8 @@ Lake, 6 cores, 2.6 GHz base), gcc 14.1, `-O3 -march=native`, Release build.
 
 | Hash | Output | Bulk (bytes/cycle) | Short keys (cycles/hash, 1-31 B) |
 |:---|---:|---:|---:|
-| **wifehash** | 128 | **21.4** | 22.4 |
-| XXH3-128 | 128 | 21.0 | 19.1 |
+| **wifehash** | 128 | **21.5** | 22.4 |
+| XXH3-128 | 128 | 20.4 | 19.1 |
 | MeowHash (AES-NI) | 128 | 19.4 | 38.1 |
 | rapidhash | 64 | 14.0 | 15.5 |
 | MuseAir-128.bfast | 128 | 13.2 | 15.9 |
