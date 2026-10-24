@@ -139,6 +139,20 @@ It should be noted that wifehash is NOT for small keys. It's for bulk hashing.
 
 Additionally note that XXH3-128 does NOT pass the full SMHasher3 suite. Wifehash does.
 
+And on an Intel Core Ultra (Meteor Lake), same build and same test:
+
+| Hash | Output | Bulk (bytes/cycle) | Short keys (cycles/hash, 1-31 B) |
+|:---|---:|---:|---:|
+| falkhash2 (AES-NI) | 128 | 28.40 | 45.72 |
+| falkhash1 (AES-NI) | 128 | 28.36 | 44.79 |
+| AquaHash (AES-NI) | 128 | 26.98 | 22.00 |
+| **wifehash** | 128 | **26.23** (±0.01) | 29.22 (±0.19) |
+| XXH3-128 | 128 | 22.81 (±0.01) | 26.18 (±0.40) |
+| MeowHash (AES-NI) | 128 | 19.78 | 46.14 |
+| rapidhash | 64 | 19.10 | 21.35 |
+
+falkhash1, falkhash2 and AquaHash are faster on bulk here, but fail 10, 6 and 55 SMHasher3 tests respectively. Of the hashes above that pass, wifehash is the fastest. Wifehash gains up to 15% efficency over XXH3-128 here (Still 11% deficit for short keys, however). On unaligned input, Wifehash is level with Aquahash, and within 3% of falkhash.
+
 ## How it works
 
 Eight 64-bit accumulator lanes are fed 64 bytes at a time with
