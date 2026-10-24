@@ -120,6 +120,8 @@ Digests are printed high word first, as `h[1]` then `h[0]`.
 These numbers were recorded using [SMHasher3](https://gitlab.com/fwojcik/smhasher3)'s speed test on an Intel Core i7-10750H (Comet
 Lake, 6 cores, 2.6 GHz base), gcc 14.1, `-O3 -march=native`, Release build. I tested each competing hash 5 times, took their average and reported them here. I am reporting wifehash's number from the results file so you may compare if you'd like. I've reported a ± range as well for XXH3-128 and Wifehash, since it's a pretty tight race.
 
+### Comet Lake Results
+
 | Hash | Output | Bulk (bytes/cycle) | Short keys (cycles/hash, 1-31 B) |
 |:---|---:|---:|---:|
 | **wifehash** | 128 | **21.95** (±0.30) | 23.14 (±0.67) |
@@ -138,6 +140,8 @@ Lake, 6 cores, 2.6 GHz base), gcc 14.1, `-O3 -march=native`, Release build. I te
 It should be noted that wifehash is NOT for small keys. It's for bulk hashing.
 
 Additionally note that XXH3-128 does NOT pass the full SMHasher3 suite. Wifehash does.
+
+### Meteor Lake Results
 
 And on an Intel Core Ultra (Meteor Lake), same build and same test:
 
