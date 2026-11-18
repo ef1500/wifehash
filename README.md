@@ -167,10 +167,7 @@ short keys are cycles per hash for 1-31-byte inputs. The run files are linked ab
 wifehash is for bulk hashing, not small keys. Note also that XXH3-128 does not pass the full
 SMHasher3 suite; wifehash does.
 
-> **Version note:** every table is wifehash 1.1.1. 1.1.1 loads each 32-byte AVX2 block of input
-> once instead of twice (gcc was folding the same load into two instructions) and replaces the
-> NEON bulk loop. Output is bit-identical to 1.1.0 (verification codes unchanged), so every
-> quality result still applies. Older runs are kept in [`results/old`](results/old).
+> **Version note:** Older runs are kept in [`results/old`](results/old).
 
 > **Extension-dependent hashes:** hashes marked (AES-NI), (ARM AES) or (VPCLMULQDQ) need an
 > instruction-set extension on top of AVX2 or NEON. wifehash uses only AVX2 integer
@@ -191,10 +188,7 @@ SMHasher3 suite; wifehash does.
 
 ### Comet Lake Results
 
-> **Note:** this laptop's cooling fan is broken. Under sustained load the CPU can throttle, and
-> SMHasher3 counts cycles with the fixed-rate timestamp counter, so a throttled core shows up
-> as fewer bytes per cycle. Treat these numbers as a lower bound. All hashes in each table ran
-> on the same machine under the same conditions, so the comparison between them still holds.
+> **Note:** my laptop's fan is broken on this machine.
 
 Intel Core i7-10750H (Comet Lake, 6 cores, 2.6 GHz base), pinned to one logical CPU at high
 priority (`start /affinity`), Windows 11, gcc 14.1, SMHasher3 `3b61937`, Release build
