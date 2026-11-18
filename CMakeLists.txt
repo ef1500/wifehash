@@ -1,8 +1,8 @@
 cmake_minimum_required(VERSION 3.14)
 
 project(wifehash
-    VERSION      1.0.0
-    DESCRIPTION  "128-bit non-cryptographic hash with AVX2 Support"
+    VERSION      1.1.1
+    DESCRIPTION  "128-bit non-cryptographic hash with AVX2 and NEON Support"
     HOMEPAGE_URL "https://github.com/ef1500/wifehash"
     LANGUAGES    C)
 

@@ -1,0 +1,12 @@
+backend neon, WHX_STREAM_PREFETCH 0
+A  GB/s by update size         16       64      256     1024     4096    65536  1048576
+   hot  wifehash             2.28     5.59     8.42    14.75    17.01    17.85    18.02
+   hot  XXH3-128             1.43     3.94     5.54     8.83    11.11    12.14    12.24
+   hot  wifehash lead        +59%     +42%     +52%     +67%     +53%     +47%     +47%
+   DRAM wifehash             2.28     5.61     8.45    14.13    14.14    14.14    14.14
+   DRAM XXH3-128             1.42     3.96     5.59     8.67    10.85    11.84    12.15
+   DRAM wifehash lead        +61%     +42%     +51%     +63%     +30%     +19%     +16%
+B  page-cached 512 MiB file, GB/s   wifehash  XXH3-128   lead
+   read() 256 KiB buffer               4.75      4.24    +12%
+   mmap + MADV_SEQUENTIAL              5.78      5.37     +8%
+(sink 654d650d3fc3643c)

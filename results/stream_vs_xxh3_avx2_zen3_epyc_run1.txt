@@ -1,0 +1,12 @@
+backend avx2, WHX_STREAM_PREFETCH 512
+A  GB/s by update size         16       64      256     1024     4096    65536  1048576
+   hot  wifehash             3.97    13.84    30.81    50.62    60.15    64.35    59.24
+   hot  XXH3-128             2.52     9.10    19.08    35.85    47.10    52.95    53.54
+   hot  wifehash lead        +58%     +52%     +61%     +41%     +28%     +22%     +11%
+   DRAM wifehash             3.92    12.14    16.28    17.63    18.62    19.37    19.95
+   DRAM XXH3-128             2.50     8.41    13.88    16.56    17.13    18.67    19.20
+   DRAM wifehash lead        +57%     +44%     +17%      +6%      +9%      +4%      +4%
+B  page-cached 512 MiB file, GB/s   wifehash  XXH3-128   lead
+   read() 256 KiB buffer               9.52      9.45     +1%
+   mmap + MADV_SEQUENTIAL              6.74      6.85     -2%
+(sink 654d650d3fc3643c)

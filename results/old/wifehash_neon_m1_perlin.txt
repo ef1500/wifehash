@@ -1,0 +1,119 @@
+--- Testing wifehash "WIFEHASH128X, lane-parallel bulk path (MEIHASH mixer, widened)" [neon]
+
+[[[ Sanity Tests ]]]
+
+Verification value LE 0xAA7C087B ...... PASS
+Running sanity check 1       .......... PASS
+Running sanity check 2       .......... PASS
+Running append zeroes test   .......... PASS
+Running prepend zeroes test  .......... PASS
+Running thread-safety test 1 .......... PASS
+Running thread-safety test 2 .......... PASS
+
+[[[ Keyset 'PerlinNoise' Tests ]]]
+
+Generating coordinates from   2-byte keys - 16777216 keys
+Testing all collisions (     128-bit) - Expected        0.0, actual          0  (1.000x) (^ 0)
+Testing all collisions (high  64-bit) - Expected        0.0, actual          0  (1.000x) (^ 0)
+Testing all collisions (low   64-bit) - Expected        0.0, actual          0  (1.000x) (^ 0)
+Testing all collisions (high  40-bit) - Expected      128.0, actual        145  (1.133x) (^ 3)
+Testing all collisions (low   40-bit) - Expected      128.0, actual        137  (1.070x) (^ 2)
+Testing all collisions (high  32-bit) - Expected    32725.4, actual      32611  (0.997x) (^ 0)
+Testing all collisions (low   32-bit) - Expected    32725.4, actual      32685  (0.999x) (^ 0)
+Testing all collisions (high 22..43 bits) - Worst is 39 bits: 286/256           (1.117x) (^ 0)
+Testing all collisions (low  22..43 bits) - Worst is 39 bits: 272/256           (1.063x) (^ 0)
+Testing distribution   (any   8..21 bits) - Worst bias is 11 bits at bit  97:    0.760x  (^ 1)
+---Analyzing differential distribution
+Testing all collisions (     128-bit) - Expected        0.0, actual          0  (1.000x) (^ 0)
+Testing all collisions (high  64-bit) - Expected        0.0, actual          0  (1.000x) (^ 0)
+Testing all collisions (low   64-bit) - Expected        0.0, actual          0  (1.000x) (^ 0)
+Testing all collisions (high  40-bit) - Expected      128.0, actual        130  (1.016x) (^ 1)
+Testing all collisions (low   40-bit) - Expected      128.0, actual        129  (1.008x) (^ 1)
+Testing all collisions (high  32-bit) - Expected    32725.4, actual      32764  (1.001x) (^ 1)
+Testing all collisions (low   32-bit) - Expected    32725.4, actual      32630  (0.997x) (^ 0)
+Testing all collisions (high 22..43 bits) - Worst is 43 bits: 23/16             (1.438x) (^ 0)
+Testing all collisions (low  22..43 bits) - Worst is 34 bits: 8298/8189         (1.013x) (^ 0)
+Testing distribution   (any   8..21 bits) - Worst bias is 18 bits at bit  32:    0.544x  (^ 0)
+---Analyzing additional differential distribution
+Testing all collisions (     128-bit) - Expected        0.0, actual          0  (1.000x) (^ 0)
+Testing all collisions (high  64-bit) - Expected        0.0, actual          0  (1.000x) (^ 0)
+Testing all collisions (low   64-bit) - Expected        0.0, actual          0  (1.000x) (^ 0)
+Testing all collisions (high  40-bit) - Expected      128.0, actual        133  (1.039x) (^ 1)
+Testing all collisions (low   40-bit) - Expected      128.0, actual        134  (1.047x) (^ 1)
+Testing all collisions (high  32-bit) - Expected    32725.4, actual      32559  (0.995x) (^ 0)
+Testing all collisions (low   32-bit) - Expected    32725.4, actual      32348  (0.988x) (^ 0)
+Testing all collisions (high 22..43 bits) - Worst is 36 bits: 2097/2048         (1.024x) (^ 0)
+Testing all collisions (low  22..43 bits) - Worst is 39 bits: 272/256           (1.063x) (^ 0)
+Testing distribution   (any   8..21 bits) - Worst bias is 16 bits at bit  79:    0.613x  (^ 1)
+
+Generating coordinates from   4-byte keys - 16777216 keys
+Testing all collisions (     128-bit) - Expected        0.0, actual          0  (1.000x) (^ 0)
+Testing all collisions (high  64-bit) - Expected        0.0, actual          0  (1.000x) (^ 0)
+Testing all collisions (low   64-bit) - Expected        0.0, actual          0  (1.000x) (^ 0)
+Testing all collisions (high  40-bit) - Expected      128.0, actual        116  (0.906x) (^ 0)
+Testing all collisions (low   40-bit) - Expected      128.0, actual        133  (1.039x) (^ 1)
+Testing all collisions (high  32-bit) - Expected    32725.4, actual      32545  (0.994x) (^ 0)
+Testing all collisions (low   32-bit) - Expected    32725.4, actual      32709  (0.999x) (^ 0)
+Testing all collisions (high 22..43 bits) - Worst is 43 bits: 21/16             (1.313x) (^ 0)
+Testing all collisions (low  22..43 bits) - Worst is 28 bits: 514972/513534     (1.003x) (^ 1)
+Testing distribution   (any   8..21 bits) - Worst bias is 13 bits at bit   6:    0.567x  (^ 0)
+---Analyzing differential distribution
+Testing all collisions (     128-bit) - Expected        0.0, actual          0  (1.000x) (^ 0)
+Testing all collisions (high  64-bit) - Expected        0.0, actual          0  (1.000x) (^ 0)
+Testing all collisions (low   64-bit) - Expected        0.0, actual          0  (1.000x) (^ 0)
+Testing all collisions (high  40-bit) - Expected      128.0, actual        126  (0.984x) (^ 0)
+Testing all collisions (low   40-bit) - Expected      128.0, actual        103  (0.805x) (^ 0)
+Testing all collisions (high  32-bit) - Expected    32725.4, actual      32555  (0.995x) (^ 0)
+Testing all collisions (low   32-bit) - Expected    32725.4, actual      32561  (0.995x) (^ 0)
+Testing all collisions (high 22..43 bits) - Worst is 43 bits: 22/16             (1.375x) (^ 0)
+Testing all collisions (low  22..43 bits) - Worst is 37 bits: 1036/1024         (1.012x) (^ 0)
+Testing distribution   (any   8..21 bits) - Worst bias is 14 bits at bit  96:    0.565x  (^ 0)
+---Analyzing additional differential distribution
+Testing all collisions (     128-bit) - Expected        0.0, actual          0  (1.000x) (^ 0)
+Testing all collisions (high  64-bit) - Expected        0.0, actual          0  (1.000x) (^ 0)
+Testing all collisions (low   64-bit) - Expected        0.0, actual          0  (1.000x) (^ 0)
+Testing all collisions (high  40-bit) - Expected      128.0, actual        131  (1.023x) (^ 1)
+Testing all collisions (low   40-bit) - Expected      128.0, actual        127  (0.992x) (^ 0)
+Testing all collisions (high  32-bit) - Expected    32725.4, actual      32713  (1.000x) (^ 0)
+Testing all collisions (low   32-bit) - Expected    32725.4, actual      32851  (1.004x) (^ 2)
+Testing all collisions (high 22..43 bits) - Worst is 31 bits: 65789/65366       (1.006x) (^ 0)
+Testing all collisions (low  22..43 bits) - Worst is 34 bits: 8266/8189         (1.009x) (^ 0)
+Testing distribution   (any   8..21 bits) - Worst bias is 15 bits at bit  83:    0.701x  (^ 3)
+
+Generating coordinates from   8-byte keys - 16777216 keys
+Testing all collisions (     128-bit) - Expected        0.0, actual          0  (1.000x) (^ 0)
+Testing all collisions (high  64-bit) - Expected        0.0, actual          0  (1.000x) (^ 0)
+Testing all collisions (low   64-bit) - Expected        0.0, actual          0  (1.000x) (^ 0)
+Testing all collisions (high  40-bit) - Expected      128.0, actual        126  (0.984x) (^ 0)
+Testing all collisions (low   40-bit) - Expected      128.0, actual        126  (0.984x) (^ 0)
+Testing all collisions (high  32-bit) - Expected    32725.4, actual      32531  (0.994x) (^ 0)
+Testing all collisions (low   32-bit) - Expected    32725.4, actual      32849  (1.004x) (^ 2)
+Testing all collisions (high 22..43 bits) - Worst is 37 bits: 1069/1024         (1.044x) (^ 0)
+Testing all collisions (low  22..43 bits) - Worst is 33 bits: 16523/16373       (1.009x) (^ 0)
+Testing distribution   (any   8..21 bits) - Worst bias is 21 bits at bit  21:    0.460x  (^ 0)
+---Analyzing differential distribution
+Testing all collisions (     128-bit) - Expected        0.0, actual          0  (1.000x) (^ 0)
+Testing all collisions (high  64-bit) - Expected        0.0, actual          0  (1.000x) (^ 0)
+Testing all collisions (low   64-bit) - Expected        0.0, actual          0  (1.000x) (^ 0)
+Testing all collisions (high  40-bit) - Expected      128.0, actual        132  (1.031x) (^ 1)
+Testing all collisions (low   40-bit) - Expected      128.0, actual        133  (1.039x) (^ 1)
+Testing all collisions (high  32-bit) - Expected    32725.4, actual      32749  (1.001x) (^ 1)
+Testing all collisions (low   32-bit) - Expected    32725.4, actual      32864  (1.004x) (^ 2)
+Testing all collisions (high 22..43 bits) - Worst is 42 bits: 39/32             (1.219x) (^ 0)
+Testing all collisions (low  22..43 bits) - Worst is 26 bits: 1935482/1932788   (1.001x) (^ 1)
+Testing distribution   (any   8..21 bits) - Worst bias is 21 bits at bit  49:    0.417x  (^ 0)
+---Analyzing additional differential distribution
+Testing all collisions (     128-bit) - Expected        0.0, actual          0  (1.000x) (^ 0)
+Testing all collisions (high  64-bit) - Expected        0.0, actual          0  (1.000x) (^ 0)
+Testing all collisions (low   64-bit) - Expected        0.0, actual          0  (1.000x) (^ 0)
+Testing all collisions (high  40-bit) - Expected      128.0, actual        133  (1.039x) (^ 1)
+Testing all collisions (low   40-bit) - Expected      128.0, actual        135  (1.055x) (^ 1)
+Testing all collisions (high  32-bit) - Expected    32725.4, actual      32732  (1.000x) (^ 1)
+Testing all collisions (low   32-bit) - Expected    32725.4, actual      32892  (1.005x) (^ 2)
+Testing all collisions (high 22..43 bits) - Worst is 30 bits: 130949/130392     (1.004x) (^ 0)
+Testing all collisions (low  22..43 bits) - Worst is 27 bits: 1009178/1006217   (1.003x) (^ 4)
+Testing distribution   (any   8..21 bits) - Worst bias is 21 bits at bit  79:    0.685x  (^ 6)
+
+
+Verification value is 0x00000001 - Testing took 27.866010 seconds
+
