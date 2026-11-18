@@ -61,6 +61,8 @@ The fastest member emergent from the Meihash family.
 
 #if defined(__GNUC__) || defined(__clang__)
   #define WHX_FN static __attribute__((unused))
+#elif defined(_MSC_VER)
+  #define WHX_FN static __inline   // unused inline functions don't raise C4505
 #else
   #define WHX_FN static
 #endif
@@ -742,7 +744,7 @@ WHX_INLINE uint64x2_t whx_scr128(uint64x2_t a, uint64x2_t sc)
 #define WHX_HSETE_ 4, 5, 6, 7, 8, 9, 2, 3, 4, 5, 10, 11, 12, 13, 14, 15, 6, 7, 8, 9
 #define WHX_HSETO_ 16, 17, 18, 19, 20, 21, 10, 11, 12, 13, \
                    22, 23, 24, 25, 26, 27, 14, 15, 16, 17
-// Generated schedule (tools/gen_neon_hybrid.py): load pair, compute pair while
+// Generated schedule from my script.
 // loading the next, compute the last pair.
 #define WHX_HLOAD__(o16a, o32a, o48a, soa, o16b, o32b, o48b, sob, sp, sk, d23a, d45a, d67a, k23a, k45a, k67a, x0a, x1a, y0a, y1a, d23b, d45b, d67b, k23b, k45b, k67b, x0b, x1b, y0b, y1b) \
     WHX_HLDQ_(p, d23a, o16a) WHX_HLDQ_(p, d45a, o32a) WHX_HLDQ_(p, d67a, o48a) \

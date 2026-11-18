@@ -26,7 +26,7 @@ Copy `wifehash.h` into your project and include it.
 With CMake:
 
 ```cmake
-find_package(wifehash 1.1 REQUIRED)
+find_package(wifehash 1.1.1 REQUIRED)   # 1.1.1 is the first version with the streaming API
 target_link_libraries(myapp PRIVATE wifehash::wifehash)
 ```
 
@@ -84,6 +84,40 @@ Hashing a file
 uint64_t digest[2];
 wifehash128x(mapped_file, file_size, 0, digest);
 ```
+
+Streaming a file (same digest as the one-shot call, without loading the file into memory)
+
+```c
+#include "wifehash.h"
+#include <stdio.h>
+
+// Hash a file in 64 KiB chunks, without loading it into memory.
+int main(int argc, char **argv) {
+    static unsigned char buf[1 << 16];
+    whx_stream s;
+    uint64_t h[2];
+    long size;
+    size_t n;
+    FILE *f;
+
+    if (argc < 2 || !(f = fopen(argv[1], "rb"))) return 1;
+    fseek(f, 0, SEEK_END);   // wifehash needs the total length up front
+    size = ftell(f);         // (long is 32-bit on Windows: use _ftelli64 past 2 GiB)
+    fseek(f, 0, SEEK_SET);
+
+    wifehash128x_stream_init(&s, 0, (uint64_t)size);
+    while ((n = fread(buf, 1, sizeof buf, f)) > 0)
+        if (wifehash128x_update(&s, buf, n) != 0) break;  // the file grew
+    fclose(f);
+
+    if (wifehash128x_final(&s, h) != 0) return 1;          // the file shrank
+    printf("%016llx%016llx\n", (unsigned long long)h[1], (unsigned long long)h[0]);
+    return 0;
+}
+```
+
+Use `ws_wifehash128x_stream_init` / `wsx_wifehash128x_stream_init` to stream the seeded
+variants; `update` and `final` are the same for all three.
 
 Print the backend which is being used
 
