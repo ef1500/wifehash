@@ -14,6 +14,7 @@
 - AVX2, AArch64 NEON and portable scalar backends, picked at compile time, all bit-identical.
 - Seeded, stateful variants (`ws_` / `wsx_`) for hash tables that take untrusted keys.
 - C99 or C++11. Needs `<stddef.h>`, `<stdint.h>`, `<string.h>`, and `<immintrin.h>` (AVX2) or `<arm_neon.h>` (AArch64).
+- Supports streaming
 
 wifehash is a member of the [MeiHash](https://github.com/ef1500/MeiHash) family; its mixer is meihash's dual-MUM
 folding mixer, used one path at a time. See [How it works](#how-it-works).
@@ -170,19 +171,18 @@ SMHasher3 suite; wifehash does.
 > **Version note:** Older runs are kept in [`results/old`](results/old).
 
 > **Extension-dependent hashes:** hashes marked (AES-NI), (ARM AES) or (VPCLMULQDQ) need an
-> instruction-set extension on top of AVX2 or NEON. wifehash uses only AVX2 integer
+> instruction-set extension on top of AVX2 or NEON. wifehash uses **only** AVX2 integer
 > instructions, so it runs at full speed on every AVX2 CPU (Intel Haswell and later, AMD Zen 1
-> and later). VPCLMULQDQ is the 256-bit carry-less multiply, found on Intel Ice Lake and Alder
+> and later). VPCLMULQDQ is the 256-bit carryless multiply, found on Intel Ice Lake and Alder
 > Lake and later and AMD Zen 3 and later. Without it, PolyXOR-128 and ChainHash-128 fall back to
 > 128-bit PCLMUL.
 >
 > [PolyXOR-128](https://github.com/orlp/polyxor/tree/3123eb6c0ac95b879a46b490ecda1de0184b14bd)
-> is Rust only. Its numbers come from a C port of its AVX2+VPCLMULQDQ kernel, which matches the
-> crate's test vectors and is bit-identical to its portable reference. The output is the crate's
-> `finalize_avalanche`. [ChainHash-128](https://github.com/thomasahle/chainhash) uses its
-> author's own SMHasher3 registration. Both are one run each, on the same builds and pinned cores
+> is Rust only. I ported it to C in order to run it properly.
+> [ChainHash-128](https://github.com/thomasahle/chainhash) uses the author's source, I just wired it into SMHasher3.
+> PolyXOR128 and ChainHash128 were both run once on each architecture.
 > as wifehash. ChainHash-128's author reports that it passes SMHasher3; PolyXOR-128 has not been
-> run through the suite here.
+> run through the suite here (I presume it passes too).
 
 ---
 
@@ -233,9 +233,9 @@ The pinned P-core held 4.6-4.7 GHz throughout the wifehash runs.
 ~18% faster than XXH3-128 on bulk and ~33% faster than MeowHash, without AES-NI. Seeding costs
 almost nothing here: `ws_wifehash128x` is within 0.6% of the unseeded hash, and
 `wsx_wifehash128x` (~8% behind) is still ~9% ahead of XXH3-128. Short keys are still
-XXH3-128's ground (~48% fewer cycles).
+XXH3-128's ground (~48% fewer cycles). It should be noted that wifehash remains competitive with PolyXOR.
 
-Alder Lake is the best case for the carry-less hashes: its 256-bit carry-less multiply issues
+Alder Lake is the best case for the carryless hashes: its 256-bit carry-less multiply issues
 about once per cycle, roughly the cost of any other vector op. PolyXOR-128 leads wifehash by ~5%
 on 256 KiB inputs. On SMHasher3's second bulk test (262017-262144-byte inputs) it drops to 25.28,
 while wifehash holds 28.00, and on short keys it takes ~2.7x wifehash's cycles. ChainHash-128 is
@@ -263,7 +263,7 @@ nothing beyond AVX2, wifehash is the fastest.
 
 ### Zen 3 Results
 
-AMD EPYC 7763 (Zen 3), a KVM virtual machine on a shared university server, pinned to one vCPU
+AMD EPYC 7763 (Zen 3), a KVM virtual machine on a shared university server, running on one vCPU
 with `taskset`, gcc 13.3, SMHasher3 `3b61937`, Release build (`-march=native`). Mean of 3
 interleaved runs each, with the min-max range in brackets.
 (wifehash runs: [1](results/wifehash_avx2_zen3_epyc_run1.txt), [2](results/wifehash_avx2_zen3_epyc_run2.txt),
@@ -283,22 +283,18 @@ interleaved runs each, with the min-max range in brackets.
 | PolyXOR-128 (VPCLMULQDQ) | 128 | 16.03 | 152.57 |
 | ChainHash-128 (VPCLMULQDQ) | 128 | 13.26 | 91.15 |
 
-~31% faster than XXH3-128 on bulk, and ~14% faster than AquaHash without AES-NI. Only the two
-falkhash versions are faster, and both fail SMHasher3 tests. Short keys are XXH3-128's ground
-here too (about half the cycles). `ws_wifehash128x` is ~3% behind the unseeded hash;
+~31% faster than XXH3-128 on bulk, and ~14% faster than AquaHash. Only the two
+falkhash versions are faster, and both fail SMHasher3 tests. `ws_wifehash128x` is ~3% behind the unseeded hash;
 `wsx_wifehash128x` (~24% behind) is level with XXH3-128.
 
-The carry-less hashes fall to the bottom on Zen 3, which issues one 256-bit VPCLMULQDQ every 2
-cycles (measured, both Zen 3 chips), 4x the cost of an integer `vpmuludq`. wifehash is ~64%
+The carryless hashes fall to the bottom on Zen 3, which issues one 256-bit VPCLMULQDQ every 2
+cycles, costing 4x more than `vpmuludq`. Because of that, wifehash is ~64% 
 faster than PolyXOR-128 and ~98% faster than ChainHash-128 here.
 
-Cycles on x86 are counted with the timestamp counter, which runs at a fixed 2.45 GHz on this CPU
-while the cores boost higher, so compare these numbers with each other rather than with the
-other machines. In throughput terms, wifehash's 26.23 bytes/cycle is ~64 GB/s and XXH3-128's
+In throughput terms, wifehash's 26.23 bytes/cycle is ~64 GB/s and XXH3-128's
 is ~49 GB/s.
 
-Zen 3 flips the alignment picture from Alder Lake: the AES-NI hashes barely notice unaligned
-input, XXH3-128 loses 17%, and wifehash loses 5%. wifehash leads XXH3-128 by 16% aligned and
+On alignment with Zen 3, XXH3-128 loses 17%, and wifehash loses 5%. wifehash leads XXH3-128 by 16% aligned and
 33% unaligned:
 
 | Hash | Aligned (offset 0) | Unaligned (offsets 1-7) | Drop |
@@ -312,7 +308,7 @@ input, XXH3-128 loses 17%, and wifehash loses 5%. wifehash leads XXH3-128 by 16%
 | PolyXOR-128 (VPCLMULQDQ) | 15.98 | 16.03 | +0.3% |
 | ChainHash-128 (VPCLMULQDQ) | 13.46 | 13.23 | -1.7% |
 
-**Zen 3 on bare metal:** AMD Ryzen Threadripper PRO 5955WX, core pinned with `taskset` (held
+**Zen 3 (again):** AMD Ryzen Threadripper PRO 5955WX, core pinned with `taskset` (held
 4.54 GHz throughout), Gentoo, gcc 16.2, same SMHasher3 build. Only the wifehash variants and the
 two carry-less hashes were run here. (wifehash runs: [1](results/wifehash_avx2_zen3_threadripper_run1.txt),
 [2](results/wifehash_avx2_zen3_threadripper_run2.txt), [3](results/wifehash_avx2_zen3_threadripper_run3.txt);
@@ -349,9 +345,11 @@ three per machine)
 | `wsx_wifehash128x` | 128 | 12.66 (12.61-12.73) | 41.28 (41.15-41.40) |
 | XXH3-128 (NEON) | 128 | 12.56 (12.52-12.59) | 30.11 (30.00-30.19) |
 
-~23% faster than XXH3-128 on bulk, on every machine and in every run: wifehash's slowest run
+~23% faster than XXH3-128 on bulk, wifehash's slowest run
 (15.37) beats XXH3-128's fastest (12.59). That is ~46 GB/s against ~37.5 GB/s at the M1's
-2.98 GHz. Throughput is the same at every alignment (0-7). `ws_wifehash128x` is ~1% behind the
+2.98 GHz. 
+
+Throughput is the same at every alignment (0-7). `ws_wifehash128x` is ~1% behind the
 unseeded hash; `wsx_wifehash128x` is ~18% behind and level with XXH3-128. gxhash is faster on bulk,
 but needs AES and fails 25 SMHasher3 tests. Short keys use the scalar small path, which takes
 ~37% more cycles than XXH3-128 on M1.
@@ -378,10 +376,7 @@ three per board)
 | `wsx_wifehash128x` | 128 | 5.60 (5.49-5.68) | 59.30 (59.14-59.37) |
 
 ~13% faster than XXH3-128 on bulk, in every run (wifehash's slowest, 6.52, beats XXH3-128's
-fastest, 5.90). Before 1.1.1 this was the one machine where XXH3-128 won (wifehash was at 5.06).
-The Cortex-A76 has only two NEON pipes and a small out-of-order window, so 1.1.1 schedules the
-block by hand and moves two lanes onto the idle scalar units; see [How it works](#how-it-works).
-On 16-byte-aligned input wifehash reaches 7.72 bytes/cycle (6.45 at offsets 1-7).
+fastest, 5.90).On 16-byte-aligned input wifehash reaches 7.72 bytes/cycle (6.45 at offsets 1-7).
 `ws_wifehash128x` is ~1% behind the unseeded hash, `wsx_wifehash128x` ~15%. gxhash is faster, but
 needs AES and fails 25 SMHasher3 tests.
 
